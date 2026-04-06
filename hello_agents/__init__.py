@@ -26,9 +26,25 @@ from .agents.react_agent import ReActAgent
 from .agents.reflection_agent import ReflectionAgent
 from .agents.plan_solve_agent import PlanSolveAgent
 
+# 兼容旧名称，避免现有用户代码与测试导入失败
+PlanAndSolveAgent = PlanSolveAgent
+
 # 工具系统
 from .tools.registry import ToolRegistry, global_registry
 from .tools.builtin.calculator import CalculatorTool, calculate
+
+# 记忆系统
+from .memory import (
+    MemoryManager,
+    LongTermMemory,
+    MemoryRetriever,
+    MemoryOrganizer,
+    MemoryUpdater,
+    MemorySecurity,
+    MemoryStorage,
+    LocalStorage,
+    VectorDBStorage
+)
 
 __all__ = [
     # 版本信息
@@ -48,11 +64,23 @@ __all__ = [
     "ReActAgent",
     "ReflectionAgent",
     "PlanSolveAgent",
+    "PlanAndSolveAgent",
 
     # 工具系统
     "ToolRegistry",
     "global_registry",
     "CalculatorTool",
     "calculate",
+    
+    # 记忆系统
+    "MemoryManager",
+    "LongTermMemory",
+    "MemoryRetriever",
+    "MemoryOrganizer",
+    "MemoryUpdater",
+    "MemorySecurity",
+    "MemoryStorage",
+    "LocalStorage",
+    "VectorDBStorage"
 ]
 

@@ -1,12 +1,10 @@
 """ContextBuilder - GSSC流水线实现
 
 实现 Gather-Select-Structure-Compress 上下文构建流程：
-1. Gather: 从多源收集候选信息（历史、工具结果）
+1. Gather: 从多源收集候选信息（历史、工具结果、记忆）
 2. Select: 基于优先级、相关性、多样性筛选
 3. Structure: 组织成结构化上下文模板
 4. Compress: 在预算内压缩与规范化
-
-注意：MemoryTool 和 RAGTool 已被移除，如需使用请自行实现
 """
 
 from typing import Dict, Any, List, Optional, Tuple
@@ -16,6 +14,7 @@ import tiktoken
 import math
 
 from ..core.message import Message
+from ..memory import MemoryManager
 
 
 @dataclass
@@ -43,6 +42,16 @@ class ContextConfig:
     mmr_lambda: float = 0.7  # MMR平衡参数（0=纯多样性, 1=纯相关性）
     system_prompt_template: str = ""  # 系统提示模板
     enable_compression: bool = True  # 启用压缩
+    enable_memory: bool = True  # 启用记忆检索
+    memory_top_k: int = 3  # 记忆检索返回数量
+    memory_weight: float = 0.8  # 记忆在相关性计算中的权重
+    enable_adaptive: bool = True  # 启用自适应调整
+    task_type_weights: Dict[str, Dict[str, float]] = field(default_factory=lambda: {
+        "qa": {"memory": 0.8, "history": 0.2, "tool_result": 0.9},
+        "creative": {"memory": 0.4, "history": 0.3, "tool_result": 0.3},
+        "analysis": {"memory": 0.7, "history": 0.2, "tool_result": 0.8},
+        "conversation": {"memory": 0.5, "history": 0.8, "tool_result": 0.4}
+    })
     
     def get_available_tokens(self) -> int:
         """获取可用token预算（扣除余量）"""
@@ -52,27 +61,32 @@ class ContextConfig:
 class ContextBuilder:
     """上下文构建器 - GSSC流水线
 
-    注意：MemoryTool 和 RAGTool 已被移除，此类暂时不可用
-
     用法示例：
     ```python
+    from hello_agents.memory import MemoryManager
+    
+    memory_manager = MemoryManager()
     builder = ContextBuilder(
-        config=ContextConfig(max_tokens=8000)
+        config=ContextConfig(max_tokens=8000),
+        memory_manager=memory_manager
     )
 
     context = builder.build(
         user_query="用户问题",
         conversation_history=[...],
-        system_instructions="系统指令"
+        system_instructions="系统指令",
+        session_id="会话ID"
     )
     ```
     """
 
     def __init__(
         self,
-        config: Optional[ContextConfig] = None
+        config: Optional[ContextConfig] = None,
+        memory_manager: Optional[MemoryManager] = None
     ):
         self.config = config or ContextConfig()
+        self.memory_manager = memory_manager
         self._encoding = tiktoken.get_encoding("cl100k_base")
     
     def build(
@@ -80,7 +94,9 @@ class ContextBuilder:
         user_query: str,
         conversation_history: Optional[List[Message]] = None,
         system_instructions: Optional[str] = None,
-        additional_packets: Optional[List[ContextPacket]] = None
+        additional_packets: Optional[List[ContextPacket]] = None,
+        session_id: Optional[str] = None,
+        task_type: Optional[str] = None
     ) -> str:
         """构建完整上下文
         
@@ -89,20 +105,27 @@ class ContextBuilder:
             conversation_history: 对话历史
             system_instructions: 系统指令
             additional_packets: 额外的上下文包
+            session_id: 会话ID（用于记忆检索）
+            task_type: 任务类型（可选，自动识别）
             
         Returns:
             结构化上下文字符串
         """
+        # 识别任务类型
+        if task_type is None and self.config.enable_adaptive:
+            task_type = self._identify_task_type(user_query)
+        
         # 1. Gather: 收集候选信息
         packets = self._gather(
             user_query=user_query,
             conversation_history=conversation_history or [],
             system_instructions=system_instructions,
-            additional_packets=additional_packets or []
+            additional_packets=additional_packets or [],
+            session_id=session_id
         )
         
         # 2. Select: 筛选与排序
-        selected_packets = self._select(packets, user_query)
+        selected_packets = self._select(packets, user_query, task_type)
         
         # 3. Structure: 组织成结构化模板
         structured_context = self._structure(
@@ -121,7 +144,8 @@ class ContextBuilder:
         user_query: str,
         conversation_history: List[Message],
         system_instructions: Optional[str],
-        additional_packets: List[ContextPacket]
+        additional_packets: List[ContextPacket],
+        session_id: Optional[str]
     ) -> List[ContextPacket]:
         """Gather: 收集候选信息"""
         packets = []
@@ -133,8 +157,32 @@ class ContextBuilder:
                 metadata={"type": "instructions"}
             ))
 
-        # 注意：MemoryTool 和 RAGTool 已被移除
-        # 如需使用记忆和知识库功能，请自行实现
+        # P1: 记忆检索（相关事实）
+        if self.config.enable_memory and self.memory_manager:
+            # 检索长期记忆
+            long_term_results = self.memory_manager.semantic_search(
+                query=user_query,
+                top_k=self.config.memory_top_k
+            )
+            
+            for score, memory in long_term_results:
+                    packets.append(ContextPacket(
+                        content=f"[长期记忆] {memory.get('summary', memory.get('content', ''))}",
+                        metadata={"type": "related_memory", "score": score, "memory_id": memory.get("memory_id")}
+                    ))
+            
+            # 检索短期记忆（会话记忆）
+            if session_id:
+                session_memories = self.memory_manager.get_session_memories(session_id)
+                for memory in session_memories:
+                    # 确保记忆有id字段
+                    memory_id = memory.get("id") or memory.get("memory_id")
+                    # 直接添加短期记忆，不进行相关性过滤
+                    packets.append(ContextPacket(
+                        content=f"[会话记忆] {memory.get('summary', memory.get('content', ''))}",
+                        metadata={"type": "session_memory", "memory_id": memory_id},
+                        relevance_score=0.9  # 设置高相关性得分，确保被包含
+                    ))
 
         # P3: 对话历史（辅助材料）
         if conversation_history:
@@ -157,18 +205,33 @@ class ContextBuilder:
     def _select(
         self,
         packets: List[ContextPacket],
-        user_query: str
+        user_query: str,
+        task_type: Optional[str] = None
     ) -> List[ContextPacket]:
         """Select: 基于分数与预算的筛选"""
-        # 1) 计算相关性（关键词重叠）
+        # 1) 计算相关性
         query_tokens = set(user_query.lower().split())
         for packet in packets:
-            content_tokens = set(packet.content.lower().split())
-            if len(query_tokens) > 0:
-                overlap = len(query_tokens & content_tokens)
-                packet.relevance_score = overlap / len(query_tokens)
+            # 如果是记忆包，使用记忆系统返回的相似度得分
+            if packet.metadata.get("type") in {"related_memory", "session_memory"}:
+                if "score" in packet.metadata:
+                    packet.relevance_score = packet.metadata["score"]
+                else:
+                    # 降级到关键词重叠计算
+                    content_tokens = set(packet.content.lower().split())
+                    if len(query_tokens) > 0:
+                        overlap = len(query_tokens & content_tokens)
+                        packet.relevance_score = overlap / len(query_tokens)
+                    else:
+                        packet.relevance_score = 0.0
             else:
-                packet.relevance_score = 0.0
+                # 其他类型的包使用关键词重叠计算
+                content_tokens = set(packet.content.lower().split())
+                if len(query_tokens) > 0:
+                    overlap = len(query_tokens & content_tokens)
+                    packet.relevance_score = overlap / len(query_tokens)
+                else:
+                    packet.relevance_score = 0.0
         
         # 2) 计算新近性（指数衰减）
         def recency_score(ts: datetime) -> float:
@@ -176,19 +239,41 @@ class ContextBuilder:
             tau = 3600  # 1小时时间尺度，可暴露到配置
             return math.exp(-delta / tau)
         
-        # 3) 计算复合分：0.7*相关性 + 0.3*新近性
+        # 3) 根据任务类型获取权重
+        weights = {"memory": 0.7, "history": 0.3, "tool_result": 0.6}
+        if task_type and self.config.enable_adaptive:
+            task_weights = self.config.task_type_weights.get(task_type, {})
+            if task_weights:
+                weights.update(task_weights)
+        
+        # 4) 计算复合分
         scored_packets: List[Tuple[float, ContextPacket]] = []
         for p in packets:
             rec = recency_score(p.timestamp)
-            score = 0.7 * p.relevance_score + 0.3 * rec
+            
+            # 根据包类型调整权重
+            packet_type = p.metadata.get("type")
+            if packet_type in {"related_memory", "session_memory"}:
+                score = weights["memory"] * p.relevance_score + (1 - weights["memory"]) * rec
+            elif packet_type == "history":
+                score = weights["history"] * p.relevance_score + (1 - weights["history"]) * rec
+            elif packet_type in {"tool_result", "retrieval", "knowledge_base"}:
+                score = weights["tool_result"] * p.relevance_score + (1 - weights["tool_result"]) * rec
+            else:
+                # 默认权重
+                score = 0.7 * p.relevance_score + 0.3 * rec
+            
             scored_packets.append((score, p))
         
         # 4) 系统指令单独拿出，固定纳入
         system_packets = [p for (_, p) in scored_packets if p.metadata.get("type") == "instructions"]
+        # 会话记忆单独拿出，优先纳入
+        session_memory_packets = [p for (_, p) in scored_packets if p.metadata.get("type") == "session_memory"]
+        # 其余包
         remaining = [p for (s, p) in sorted(scored_packets, key=lambda x: x[0], reverse=True)
-                     if p.metadata.get("type") != "instructions"]
+                     if p.metadata.get("type") not in ["instructions", "session_memory"]]
         
-        # 5) 依据 min_relevance 过滤（对非系统包）
+        # 5) 依据 min_relevance 过滤（对非系统、非会话记忆包）
         filtered = [p for p in remaining if p.relevance_score >= self.config.min_relevance]
         
         # 6) 按预算填充
@@ -202,7 +287,13 @@ class ContextBuilder:
                 selected.append(p)
                 used_tokens += p.token_count
         
-        # 再按分数加入其余
+        # 再放入会话记忆（优先纳入）
+        for p in session_memory_packets:
+            if used_tokens + p.token_count <= available_tokens:
+                selected.append(p)
+                used_tokens += p.token_count
+        
+        # 最后按分数加入其余
         for p in filtered:
             if used_tokens + p.token_count > available_tokens:
                 continue
@@ -240,7 +331,7 @@ class ContextBuilder:
         # [Evidence] - 事实证据
         p2_packets = [
             p for p in selected_packets
-            if p.metadata.get("type") in {"related_memory", "knowledge_base", "retrieval", "tool_result"}
+            if p.metadata.get("type") in {"related_memory", "session_memory", "knowledge_base", "retrieval", "tool_result"}
         ]
         if p2_packets:
             evidence_section = "[Evidence]\n事实与引用：\n"
@@ -294,6 +385,35 @@ class ContextBuilder:
             used_tokens += line_tokens
         
         return "\n".join(compressed_lines)
+    
+    def _identify_task_type(self, user_query: str) -> str:
+        """识别任务类型
+        
+        Args:
+            user_query: 用户查询
+            
+        Returns:
+            任务类型
+        """
+        query_lower = user_query.lower()
+        
+        # 问答类型
+        qa_keywords = ["what", "when", "where", "who", "why", "how", "which", "is", "are", "was", "were", "do", "does", "did", "can", "could", "would", "should", "will", "may", "might", "?", "吗", "呢", "什么", "怎么", "为什么", "哪里", "何时", "谁", "哪个"]
+        if any(keyword in query_lower for keyword in qa_keywords):
+            return "qa"
+        
+        # 创意写作类型
+        creative_keywords = ["write", "create", "generate", "compose", "design", "invent", "imagine", "story", "poem", "essay", "letter", "email", "report", "article", "创作", "写", "生成", "设计", "想象", "故事", "诗歌", "文章", "邮件", "报告"]
+        if any(keyword in query_lower for keyword in creative_keywords):
+            return "creative"
+        
+        # 分析类型
+        analysis_keywords = ["analyze", "analys", "evaluate", "assess", "examine", "review", "study", "inspect", "investigate", "analyze", "分析", "评估", "审查", "研究", "检查", "调查"]
+        if any(keyword in query_lower for keyword in analysis_keywords):
+            return "analysis"
+        
+        # 默认对话类型
+        return "conversation"
 
 
 def count_tokens(text: str) -> int:
