@@ -26,7 +26,7 @@ def create_agent(
         agent_type: Agent 类型，支持：
             - "react": ReActAgent（推理-行动循环）
             - "reflection": ReflectionAgent（反思型）
-            - "plan": PlanAndSolveAgent（规划-执行）
+            - "plan": PlanSolveAgent（规划-执行）
             - "simple": SimpleAgent（简单对话）
         name: Agent 名称
         llm: LLM 实例

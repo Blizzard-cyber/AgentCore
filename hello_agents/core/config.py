@@ -17,9 +17,6 @@ class Config(BaseModel):
     debug: bool = False
     log_level: str = "INFO"
 
-    # 历史管理配置（向后兼容）
-    max_history_length: int = 100
-
     # 上下文工程配置
     context_window: int = 128000  # 上下文窗口大小（tokens）
     compression_threshold: float = 0.8  # 压缩阈值（0.8 = 80%时触发压缩）

@@ -24,9 +24,9 @@ class Agent(ABC):
     - ToolRegistry: 工具管理（可选）
     - SkillLoader: 知识外化（可选）
 
-    向后兼容：
-    - self._history 属性仍然可用（通过 property 代理）
-    - add_message/clear_history/get_history 方法保持不变
+    历史访问接口：
+    - self._history 属性通过 property 代理到 HistoryManager
+    - add_message/clear_history/get_history 提供统一历史操作
     """
 
     def __init__(
@@ -132,12 +132,12 @@ class Agent(ABC):
 
     @property
     def _history(self) -> List[Message]:
-        """向后兼容：通过 property 代理到 HistoryManager"""
+        """通过 property 代理到 HistoryManager"""
         return self.history_manager.get_history()
 
     @_history.setter
     def _history(self, value: List[Message]):
-        """向后兼容：允许直接设置历史"""
+        """允许直接设置历史"""
         self.history_manager.clear()
         for msg in value:
             self.history_manager.append(msg)

@@ -314,7 +314,7 @@ class TestAgentIntegration:
         agent.add_message(Message("test", "user"))
         assert len(agent.get_history()) == 1
 
-        # 测试向后兼容的 _history 属性
+        # 测试 _history 属性代理
         assert len(agent._history) == 1
 
         print("✅ Agent HistoryManager 集成测试通过")

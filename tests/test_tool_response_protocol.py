@@ -209,7 +209,7 @@ class TestToolRegistryIntegration:
         def simple_func(input_text: str) -> str:
             return f"处理: {input_text}"
         
-        registry.register_function("simple", "简单函数", simple_func)
+        registry.register_function(simple_func, name="simple", description="简单函数")
         
         resp = registry.execute_tool("simple", "测试")
         
@@ -239,7 +239,7 @@ class TestFunctionToolException:
         def error_func(input_text: str) -> str:
             raise ValueError("故意的错误")
 
-        registry.register_function("error", "错误函数", error_func)
+        registry.register_function(error_func, name="error", description="错误函数")
 
         resp = registry.execute_tool("error", "test")
 

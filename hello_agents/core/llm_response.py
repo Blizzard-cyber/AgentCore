@@ -46,7 +46,7 @@ class LLMResponse:
     """推理过程（仅thinking model如o1、deepseek-reasoner有此字段）"""
     
     def __str__(self) -> str:
-        """向后兼容：直接打印返回content"""
+        """直接打印返回 content"""
         return self.content
     
     def __repr__(self) -> str:

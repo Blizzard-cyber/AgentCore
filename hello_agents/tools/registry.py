@@ -63,10 +63,8 @@ class ToolRegistry:
         """
         直接注册函数作为工具（简便方式）
 
-        支持两种调用方式：
-        1. 传统方式：register_function(name, description, func)
-        2. 新方式：register_function(func, name=None, description=None)
-           - 自动从函数名和 docstring 提取信息
+        仅支持新调用方式：register_function(func, name=None, description=None)
+        - 自动从函数名和 docstring 提取信息
 
         Args:
             func: 工具函数
@@ -81,10 +79,8 @@ class ToolRegistry:
             >>> # 或者指定名称和描述
             >>> registry.register_function(my_tool, name="custom_name", description="自定义描述")
         """
-        # 兼容旧的调用方式：register_function(name, description, func)
-        if isinstance(func, str) and callable(description):
-            # 旧方式：第一个参数是 name，第二个是 description，第三个是 func
-            name, description, func = func, name, description
+        if not callable(func):
+            raise TypeError("func 必须是可调用对象，请使用 register_function(func, name=None, description=None)")
 
         # 自动提取名称
         if name is None:

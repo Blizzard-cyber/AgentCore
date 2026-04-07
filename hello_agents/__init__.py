@@ -26,9 +26,6 @@ from .agents.react_agent import ReActAgent
 from .agents.reflection_agent import ReflectionAgent
 from .agents.plan_solve_agent import PlanSolveAgent
 
-# 兼容旧名称，避免现有用户代码与测试导入失败
-PlanAndSolveAgent = PlanSolveAgent
-
 # 工具系统
 from .tools.registry import ToolRegistry, global_registry
 from .tools.builtin.calculator import CalculatorTool, calculate
@@ -64,7 +61,6 @@ __all__ = [
     "ReActAgent",
     "ReflectionAgent",
     "PlanSolveAgent",
-    "PlanAndSolveAgent",
 
     # 工具系统
     "ToolRegistry",
