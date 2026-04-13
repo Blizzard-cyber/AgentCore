@@ -9,8 +9,8 @@
 
 from typing import Dict, Any, List, Optional
 import logging
-from hello_agents.tools import Tool, ToolParameter, ToolResponse
-from hello_agents.tools.errors import ToolErrorCode
+from agent_core.tools import Tool, ToolParameter, ToolResponse
+from agent_core.tools.errors import ToolErrorCode
 
 logger = logging.getLogger(__name__)
 
@@ -196,7 +196,7 @@ class WeatherTool(Tool):
 # ============================================
 
 if __name__ == "__main__":
-    from hello_agents import ToolRegistry, ReActAgent, AgentCoreLLM
+    from agent_core import ToolRegistry, ReActAgent, AgentCoreLLM
     
     # 1. 创建工具
     print("=== 创建天气工具 ===")

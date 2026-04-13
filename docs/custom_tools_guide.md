@@ -5,8 +5,8 @@
 ## 最小工具
 
 ```python
-from hello_agents.tools.base import Tool
-from hello_agents.tools.response import ToolResponse
+from agent_core.tools.base import Tool
+from agent_core.tools.response import ToolResponse
 
 class EchoTool(Tool):
     name = "echo"

@@ -17,10 +17,10 @@ from dotenv import load_dotenv
 # 加载环境变量
 load_dotenv()
 
-from hello_agents.core.message import Message
-from hello_agents.context.history import HistoryManager
-from hello_agents.context.truncator import ObservationTruncator
-from hello_agents.core.config import Config
+from agent_core.core.message import Message
+from agent_core.context.history import HistoryManager
+from agent_core.context.truncator import ObservationTruncator
+from agent_core.core.config import Config
 
 
 class TestMessage:
@@ -300,7 +300,7 @@ class TestAgentIntegration:
 
     def test_agent_history_manager_integration(self):
         """测试 Agent 集成 HistoryManager"""
-        from hello_agents import SimpleAgent, AgentCoreLLM
+        from agent_core import SimpleAgent, AgentCoreLLM
 
         llm = AgentCoreLLM()
         config = Config(min_retain_rounds=2)
@@ -321,7 +321,7 @@ class TestAgentIntegration:
 
     def test_agent_auto_compression(self):
         """测试 Agent 自动压缩"""
-        from hello_agents import SimpleAgent, AgentCoreLLM
+        from agent_core import SimpleAgent, AgentCoreLLM
 
         llm = AgentCoreLLM()
         config = Config(min_retain_rounds=2)
@@ -343,7 +343,7 @@ class TestAgentIntegration:
 
     def test_agent_truncator_integration(self):
         """测试 Agent 集成 ObservationTruncator"""
-        from hello_agents import SimpleAgent, AgentCoreLLM
+        from agent_core import SimpleAgent, AgentCoreLLM
 
         llm = AgentCoreLLM()
         agent = SimpleAgent("测试助手", llm)
@@ -356,7 +356,7 @@ class TestAgentIntegration:
 
     def test_agent_real_conversation_with_compression(self):
         """测试真实对话场景下的自动压缩（真实 API 调用）"""
-        from hello_agents import SimpleAgent, AgentCoreLLM
+        from agent_core import SimpleAgent, AgentCoreLLM
 
         llm = AgentCoreLLM()
         config = Config(

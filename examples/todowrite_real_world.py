@@ -9,8 +9,8 @@
 - 搜索功能
 """
 
-from hello_agents import ReActAgent, AgentCoreLLM, ToolRegistry, Config
-from hello_agents.tools.builtin import TodoWriteTool
+from agent_core import ReActAgent, AgentCoreLLM, ToolRegistry, Config
+from agent_core.tools.builtin import TodoWriteTool
 from dotenv import load_dotenv
 import time
 

@@ -7,10 +7,10 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from hello_agents.tools.builtin.todowrite_tool import TodoWriteTool, TodoItem, TodoList
-from hello_agents.tools.response import ToolResponse, ToolStatus
-from hello_agents.tools.errors import ToolErrorCode
-from hello_agents import ToolRegistry, ReActAgent, AgentCoreLLM, Config
+from agent_core.tools.builtin.todowrite_tool import TodoWriteTool, TodoItem, TodoList
+from agent_core.tools.response import ToolResponse, ToolStatus
+from agent_core.tools.errors import ToolErrorCode
+from agent_core import ToolRegistry, ReActAgent, AgentCoreLLM, Config
 from dotenv import load_dotenv
 load_dotenv()
 

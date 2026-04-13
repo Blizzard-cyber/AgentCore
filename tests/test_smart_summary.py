@@ -2,9 +2,9 @@
 
 import pytest
 import os
-from hello_agents import SimpleAgent, AgentCoreLLM
-from hello_agents.core.message import Message
-from hello_agents.core.config import Config
+from agent_core import SimpleAgent, AgentCoreLLM
+from agent_core.core.message import Message
+from agent_core.core.config import Config
 
 # 加载环境变量
 from dotenv import load_dotenv

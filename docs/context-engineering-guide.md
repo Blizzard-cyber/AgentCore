@@ -19,7 +19,7 @@
 ## 推荐配置
 
 ```python
-from hello_agents import Config
+from agent_core import Config
 
 config = Config(
     context_window=128000,

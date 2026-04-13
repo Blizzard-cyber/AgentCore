@@ -18,7 +18,7 @@
 
 ```python
 import asyncio
-from hello_agents import ReActAgent, HelloAgentsLLM
+from agent_core import ReActAgent, HelloAgentsLLM
 
 async def main():
     agent = ReActAgent("assistant", HelloAgentsLLM())

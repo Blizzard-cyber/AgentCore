@@ -2,7 +2,7 @@
 
 import pytest
 import os
-from hello_agents import (
+from agent_core import (
     SimpleAgent, 
     ReActAgent, 
     ReflectionAgent, 
@@ -10,7 +10,7 @@ from hello_agents import (
     AgentCoreLLM, 
     ToolRegistry
 )
-from hello_agents.tools.builtin.calculator import CalculatorTool
+from agent_core.tools.builtin.calculator import CalculatorTool
 # 加载环境变量
 from dotenv import load_dotenv
 load_dotenv()

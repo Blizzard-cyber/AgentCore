@@ -5,12 +5,12 @@
 
 import asyncio
 import time
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.agents.react_agent import ReActAgent
-from hello_agents.tools.registry import ToolRegistry
-from hello_agents.tools.base import Tool, ToolParameter
-from hello_agents.tools.response import ToolResponse
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.agents.react_agent import ReActAgent
+from agent_core.tools.registry import ToolRegistry
+from agent_core.tools.base import Tool, ToolParameter
+from agent_core.tools.response import ToolResponse
 
 
 # ==================== 模拟耗时工具 ====================

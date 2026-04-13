@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import pytest
 from unittest.mock import Mock, MagicMock, patch
-from hello_agents.core.llm import AgentCoreLLM
+from agent_core.core.llm import AgentCoreLLM
 from openai.types.chat import ChatCompletion
 
 
@@ -16,7 +16,7 @@ class TestLLMFunctionCalling:
     @pytest.fixture
     def mock_openai_client(self):
         """创建 Mock OpenAI 客户端"""
-        with patch('hello_agents.core.llm.OpenAI') as mock_openai:
+        with patch('agent_core.core.llm.OpenAI') as mock_openai:
             mock_client = MagicMock()
             mock_openai.return_value = mock_client
             yield mock_client
@@ -91,7 +91,7 @@ class TestLLMFunctionCalling:
     
     def test_invoke_with_tools_error_handling(self, llm, mock_openai_client):
         """测试错误处理"""
-        from hello_agents.core.exceptions import AgentCoreException
+        from agent_core.core.exceptions import AgentCoreException
         
         messages = [{"role": "user", "content": "测试"}]
         tools = []

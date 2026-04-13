@@ -63,7 +63,7 @@ class ContextBuilder:
 
     用法示例：
     ```python
-    from hello_agents.memory import MemoryManager
+    from agent_core.memory import MemoryManager
     
     memory_manager = MemoryManager()
     builder = ContextBuilder(

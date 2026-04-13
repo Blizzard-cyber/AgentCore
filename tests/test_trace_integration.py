@@ -5,11 +5,11 @@ import tempfile
 import shutil
 from pathlib import Path
 
-from hello_agents.core.config import Config
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.agents.react_agent import ReActAgent
-from hello_agents.tools.registry import ToolRegistry
-from hello_agents.tools.builtin.calculator import CalculatorTool
+from agent_core.core.config import Config
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.agents.react_agent import ReActAgent
+from agent_core.tools.registry import ToolRegistry
+from agent_core.tools.builtin.calculator import CalculatorTool
 
 
 class TestTraceIntegration:

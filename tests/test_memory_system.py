@@ -9,7 +9,7 @@
 """
 
 import pytest
-from hello_agents import MemoryManager
+from agent_core import MemoryManager
 
 
 class TestMemorySystem:

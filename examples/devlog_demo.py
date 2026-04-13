@@ -7,10 +7,10 @@
 4. 持久化和恢复
 """
 
-from hello_agents import ReActAgent, ToolRegistry
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.tools.builtin import DevLogTool
+from agent_core import ReActAgent, ToolRegistry
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.tools.builtin import DevLogTool
 from pathlib import Path
 
 # 加载环境变量

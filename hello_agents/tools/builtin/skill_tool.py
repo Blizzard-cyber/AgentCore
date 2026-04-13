@@ -9,8 +9,8 @@
 - 参数替换：支持 $ARGUMENTS 占位符
 
 使用示例：
-    >>> from hello_agents.skills import SkillLoader
-    >>> from hello_agents.tools.builtin.skill_tool import SkillTool
+    >>> from agent_core.skills import SkillLoader
+    >>> from agent_core.tools.builtin.skill_tool import SkillTool
     >>> loader = SkillLoader(skills_dir=Path("skills"))
     >>> tool = SkillTool(skill_loader=loader)
     >>> # Agent 调用

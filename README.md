@@ -29,8 +29,8 @@ LLM_BASE_URL=your-base-url
 ### 3. 运行最小示例
 
 ```python
-from hello_agents import ReActAgent, HelloAgentsLLM, ToolRegistry
-from hello_agents.tools.builtin.calculator import CalculatorTool
+from agent_core import ReActAgent, HelloAgentsLLM, ToolRegistry
+from agent_core.tools.builtin.calculator import CalculatorTool
 
 llm = HelloAgentsLLM()
 registry = ToolRegistry()
@@ -42,12 +42,12 @@ print(agent.run("计算 256 * 789"))
 
 ## 核心模块
 
-- `hello_agents/agents`: Agent 范式实现（Simple/ReAct/Reflection/PlanSolve）
-- `hello_agents/core`: 基础抽象、LLM 适配、生命周期与会话组件
-- `hello_agents/tools`: 工具协议、注册器、内置工具、错误模型
-- `hello_agents/context`: 历史管理、Token 计数、上下文构建、截断策略
-- `hello_agents/memory`: 长短期记忆与存储实现
-- `hello_agents/observability`: Trace、事件与诊断输出
+- `agent_core/agents`: Agent 范式实现（Simple/ReAct/Reflection/PlanSolve）
+- `agent_core/core`: 基础抽象、LLM 适配、生命周期与会话组件
+- `agent_core/tools`: 工具协议、注册器、内置工具、错误模型
+- `agent_core/context`: 历史管理、Token 计数、上下文构建、截断策略
+- `agent_core/memory`: 长短期记忆与存储实现
+- `agent_core/observability`: Trace、事件与诊断输出
 
 ## 文档目录
 

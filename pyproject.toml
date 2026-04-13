@@ -37,11 +37,11 @@ Repository = "https://github.com/Blizzard-cyber/HelloAgents"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["hello_agents*"]
+include = ["agent_core*"]
 exclude = ["tests*", "examples*", "docs*"]
 
 [tool.setuptools.package-data]
-hello_agents = ["py.typed"]
+agent_core = ["py.typed"]
 
 [tool.black]
 line-length = 88

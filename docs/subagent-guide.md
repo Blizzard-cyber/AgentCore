@@ -12,7 +12,7 @@
 ## 工厂创建
 
 ```python
-from hello_agents.agents.factory import create_agent
+from agent_core.agents.factory import create_agent
 sub = create_agent("react", "sub-search", llm, tool_registry=registry)
 ```
 

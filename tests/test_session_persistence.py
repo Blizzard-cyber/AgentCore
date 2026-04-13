@@ -7,12 +7,12 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from hello_agents.core.session_store import SessionStore
-from hello_agents.core.message import Message
-from hello_agents.core.agent import Agent
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.agents.simple_agent import SimpleAgent
+from agent_core.core.session_store import SessionStore
+from agent_core.core.message import Message
+from agent_core.core.agent import Agent
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.agents.simple_agent import SimpleAgent
 # 加载环境变量
 from dotenv import load_dotenv
 load_dotenv()
@@ -284,8 +284,8 @@ class TestAgentSessionPersistence:
 
     def test_compute_tool_schema_hash(self):
         """测试工具 Schema 哈希计算"""
-        from hello_agents.tools.registry import ToolRegistry
-        from hello_agents.tools.builtin.calculator import CalculatorTool
+        from agent_core.tools.registry import ToolRegistry
+        from agent_core.tools.builtin.calculator import CalculatorTool
 
         llm = AgentCoreLLM()
         registry = ToolRegistry()

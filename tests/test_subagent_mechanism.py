@@ -1,15 +1,15 @@
 """测试子代理机制"""
 
 import pytest
-from hello_agents.core.agent import Agent
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.core.message import Message
-from hello_agents.tools.registry import ToolRegistry
-from hello_agents.tools.tool_filter import ReadOnlyFilter, FullAccessFilter
-from hello_agents.tools.base import Tool, ToolParameter
-from hello_agents.tools.response import ToolResponse
-from hello_agents.tools.errors import ToolErrorCode
+from agent_core.core.agent import Agent
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.core.message import Message
+from agent_core.tools.registry import ToolRegistry
+from agent_core.tools.tool_filter import ReadOnlyFilter, FullAccessFilter
+from agent_core.tools.base import Tool, ToolParameter
+from agent_core.tools.response import ToolResponse
+from agent_core.tools.errors import ToolErrorCode
 from typing import Dict, Any, List
 from dotenv import load_dotenv
 load_dotenv()

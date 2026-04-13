@@ -3,12 +3,12 @@
 演示如何使用 TaskTool 实现上下文隔离的子任务执行。
 """
 
-from hello_agents import ReActAgent, SimpleAgent
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.tools.registry import ToolRegistry
-from hello_agents.tools.builtin import ReadTool, WriteTool, EditTool
-from hello_agents.agents.factory import create_agent, default_subagent_factory
+from agent_core import ReActAgent, SimpleAgent
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.tools.registry import ToolRegistry
+from agent_core.tools.builtin import ReadTool, WriteTool, EditTool
+from agent_core.agents.factory import create_agent, default_subagent_factory
 # 加载环境变量
 from dotenv import load_dotenv
 load_dotenv()
@@ -63,7 +63,7 @@ def example_2_manual_subagent():
     explore_agent = ReActAgent("explorer", llm, tool_registry=registry, config=config)
 
     # 手动调用子代理（上下文隔离）
-    from hello_agents.tools.tool_filter import ReadOnlyFilter
+    from agent_core.tools.tool_filter import ReadOnlyFilter
 
     print("\n执行子代理任务...")
     result = explore_agent.run_as_subagent(
@@ -121,7 +121,7 @@ def example_3_custom_factory():
         )
 
     # 手动注册 TaskTool
-    from hello_agents.tools.builtin.task_tool import TaskTool
+    from agent_core.tools.builtin.task_tool import TaskTool
 
     task_tool = TaskTool(
         agent_factory=my_agent_factory,
@@ -170,7 +170,7 @@ def example_5_tool_filtering():
     print("示例 5：工具过滤策略")
     print("="*60)
 
-    from hello_agents.tools.tool_filter import (
+    from agent_core.tools.tool_filter import (
         ReadOnlyFilter,
         FullAccessFilter,
         CustomFilter

@@ -7,12 +7,12 @@
 - 异常保护
 """
 
-from hello_agents import ReActAgent, SimpleAgent
-from hello_agents.core.llm import AgentCoreLLM
-from hello_agents.core.config import Config
-from hello_agents.tools.registry import ToolRegistry
-from hello_agents.tools.builtin import ReadTool, WriteTool
-from hello_agents.core.message import Message
+from agent_core import ReActAgent, SimpleAgent
+from agent_core.core.llm import AgentCoreLLM
+from agent_core.core.config import Config
+from agent_core.tools.registry import ToolRegistry
+from agent_core.tools.builtin import ReadTool, WriteTool
+from agent_core.core.message import Message
 import tempfile
 from pathlib import Path
 # 加载环境变量

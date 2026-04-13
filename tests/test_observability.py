@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-from hello_agents.observability import TraceLogger
+from agent_core.observability import TraceLogger
 
 
 class TestTraceLogger:

@@ -14,11 +14,11 @@ import unittest
 import time
 from datetime import datetime, timedelta
 
-from hello_agents.memory import MemoryManager, ShortTermMemory
-from hello_agents.memory.cache import MemoryCache
-from hello_agents.memory.storage import VectorDBStorage
-from hello_agents.context.builder import ContextBuilder, ContextConfig
-from hello_agents.core.message import Message
+from agent_core.memory import MemoryManager, ShortTermMemory
+from agent_core.memory.cache import MemoryCache
+from agent_core.memory.storage import VectorDBStorage
+from agent_core.context.builder import ContextBuilder, ContextConfig
+from agent_core.core.message import Message
 
 
 class TestMemoryEnhancements(unittest.TestCase):
