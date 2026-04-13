@@ -1,17 +1,17 @@
-"""HelloAgents统一LLM接口 - 支持OpenAI、Anthropic、Gemini等多种接口"""
+"""AgentCore统一LLM接口 - 支持OpenAI、Anthropic、Gemini等多种接口"""
 
 import os
 import asyncio
 from typing import Optional, Iterator, List, Dict, Union, Any, AsyncIterator
 
-from .exceptions import HelloAgentsException
+from .exceptions import AgentCoreException
 from .llm_response import LLMResponse, StreamStats, LLMToolResponse
 from .llm_adapters import create_adapter, BaseLLMAdapter
 
 
-class HelloAgentsLLM:
+class AgentCoreLLM:
     """
-    HelloAgents统一LLM客户端
+    AgentCore统一LLM客户端
 
     设计理念：
     - 统一配置：只需 LLM_MODEL_ID、LLM_API_KEY、LLM_BASE_URL、LLM_TIMEOUT
@@ -60,11 +60,11 @@ class HelloAgentsLLM:
 
         # 验证必要参数
         if not self.model:
-            raise HelloAgentsException("必须提供模型名称（model参数或LLM_MODEL_ID环境变量）")
+            raise AgentCoreException("必须提供模型名称（model参数或LLM_MODEL_ID环境变量）")
         if not self.api_key:
-            raise HelloAgentsException("必须提供API密钥（api_key参数或LLM_API_KEY环境变量）")
+            raise AgentCoreException("必须提供API密钥（api_key参数或LLM_API_KEY环境变量）")
         if not self.base_url:
-            raise HelloAgentsException("必须提供服务地址（base_url参数或LLM_BASE_URL环境变量）")
+            raise AgentCoreException("必须提供服务地址（base_url参数或LLM_BASE_URL环境变量）")
 
         # 创建适配器（自动检测）
         self._adapter: BaseLLMAdapter = create_adapter(
@@ -200,7 +200,7 @@ class HelloAgentsLLM:
             统一的工具调用响应对象 (LLMToolResponse)
 
         Raises:
-            HelloAgentsException: 当 LLM 调用失败时
+            AgentCoreException: 当 LLM 调用失败时
         """
         # 合并参数
         call_kwargs = {

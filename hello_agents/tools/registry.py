@@ -1,4 +1,4 @@
-"""工具注册表 - HelloAgents原生工具系统"""
+"""工具注册表 - AgentCore原生工具系统"""
 
 from typing import Optional, Any, Callable, Dict
 import time
@@ -9,7 +9,7 @@ from .circuit_breaker import CircuitBreaker
 
 class ToolRegistry:
     """
-    HelloAgents工具注册表
+    AgentCore工具注册表
 
     提供工具的注册、管理和执行功能。
     支持两种工具注册方式：

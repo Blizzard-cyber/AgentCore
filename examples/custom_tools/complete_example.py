@@ -1,9 +1,9 @@
 """自定义工具完整示例
 
-这个文件展示了如何使用 HelloAgents 框架创建和使用自定义工具的完整流程。
+这个文件展示了如何使用 AgentCore 框架创建和使用自定义工具的完整流程。
 """
 
-from hello_agents import ToolRegistry, ReActAgent, HelloAgentsLLM, Config
+from hello_agents import ToolRegistry, ReActAgent, AgentCoreLLM, Config
 from hello_agents.tools import Tool, ToolParameter, ToolResponse, tool_action
 from hello_agents.tools.errors import ToolErrorCode
 
@@ -29,7 +29,7 @@ class GreetingTool(Tool):
                 message="参数 'name' 不能为空"
             )
         
-        greeting = f"你好，{name}！欢迎使用 HelloAgents 框架！"
+        greeting = f"你好，{name}！欢迎使用 AgentCore 框架！"
         
         return ToolResponse.success(
             text=greeting,
@@ -127,7 +127,7 @@ class TextProcessorTool(Tool):
 
 def main():
     print("=" * 60)
-    print("HelloAgents 自定义工具完整示例")
+    print("AgentCore 自定义工具完整示例")
     print("=" * 60)
     print()
     
@@ -177,7 +177,7 @@ def main():
     
     # 测试函数工具
     print("测试 2: 单词计数工具")
-    response = registry.execute_tool("word_counter", "Hello World from HelloAgents")
+    response = registry.execute_tool("word_counter", "Hello World from AgentCore")
     print(f"  状态: {response.status.value}")
     print(f"  结果: {response.text}")
     print()
@@ -190,7 +190,7 @@ def main():
     print()
     
     print("测试 4: 文本处理工具（反转）")
-    response = registry.execute_tool("text_reverse", {"text": "HelloAgents"})
+    response = registry.execute_tool("text_reverse", {"text": "AgentCore"})
     print(f"  状态: {response.status.value}")
     print(f"  结果: {response.text}")
     print()
@@ -203,7 +203,7 @@ def main():
     print("提示: 要在 Agent 中使用工具，需要配置 LLM。")
     print("示例代码:")
     print("""
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
     agent = ReActAgent("assistant", llm, tool_registry=registry)
     
     # Agent 会自动调用合适的工具

@@ -9,7 +9,7 @@
 
 from hello_agents.skills import SkillLoader, Skill
 from hello_agents import ReActAgent, SimpleAgent
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.tools.registry import ToolRegistry
 from hello_agents.tools.builtin.skill_tool import SkillTool
@@ -145,7 +145,7 @@ def demo_zero_config_activation():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         registry = ToolRegistry()
         agent = ReActAgent("assistant", llm, tool_registry=registry, config=config)
         

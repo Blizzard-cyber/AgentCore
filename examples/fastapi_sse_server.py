@@ -1,6 +1,6 @@
 """FastAPI SSE 流式输出服务端示例
 
-演示如何使用 HelloAgents 的流式输出功能构建 SSE 服务
+演示如何使用 AgentCore 的流式输出功能构建 SSE 服务
 
 运行方式：
     uvicorn examples.fastapi_sse_server:app --reload
@@ -17,7 +17,7 @@ from typing import Optional
 import asyncio
 
 from hello_agents import ReActAgent, SimpleAgent, ReflectionAgent, PlanSolveAgent
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.tools.registry import ToolRegistry
 from hello_agents.tools.base import Tool, ToolParameter
@@ -27,7 +27,7 @@ from hello_agents.tools.errors import ToolErrorCode
 from dotenv import load_dotenv
 load_dotenv()
 
-app = FastAPI(title="HelloAgents SSE Demo")
+app = FastAPI(title="AgentCore SSE Demo")
 
 # 添加 CORS 支持
 app.add_middleware(
@@ -45,7 +45,7 @@ config = Config(
     base_url="https://api.deepseek.com",
     stream_enabled=True
 )
-llm = HelloAgentsLLM(config=config)
+llm = AgentCoreLLM(config=config)
 
 # 初始化工具注册表
 registry = ToolRegistry()
@@ -163,7 +163,7 @@ async def agent_stream(request: AgentRequest):
 async def root():
     """根路径"""
     return {
-        "message": "HelloAgents SSE Demo",
+        "message": "AgentCore SSE Demo",
         "endpoints": {
             "stream": "/agent/stream",
             "docs": "/docs"

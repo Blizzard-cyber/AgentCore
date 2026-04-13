@@ -9,7 +9,7 @@
 - 持久化支持断点恢复
 """
 
-from hello_agents import ReActAgent, HelloAgentsLLM, ToolRegistry, Config
+from hello_agents import ReActAgent, AgentCoreLLM, ToolRegistry, Config
 from hello_agents.tools.builtin import TodoWriteTool
 from dotenv import load_dotenv
 
@@ -139,7 +139,7 @@ def demo_3_agent_integration():
     
     # 创建 Agent（TodoWriteTool 会自动注册）
     registry = ToolRegistry()
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
     agent = ReActAgent(
         name="开发助手",
         llm=llm,

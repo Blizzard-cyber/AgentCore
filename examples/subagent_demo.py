@@ -4,7 +4,7 @@
 """
 
 from hello_agents import ReActAgent, SimpleAgent
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.tools.registry import ToolRegistry
 from hello_agents.tools.builtin import ReadTool, WriteTool, EditTool
@@ -20,7 +20,7 @@ def example_1_basic_subagent():
     print("="*60)
 
     # 创建 LLM（使用环境变量配置的模型）
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
 
     # 创建工具注册表
     registry = ToolRegistry()
@@ -48,7 +48,7 @@ def example_2_manual_subagent():
     print("="*60)
 
     # 使用环境变量配置的模型
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
 
     # 禁用自动注册，避免重复
     config = Config(subagent_enabled=False, skills_enabled=False)
@@ -90,10 +90,10 @@ def example_3_custom_factory():
     print("="*60)
 
     # 主模型（使用环境变量配置）
-    main_llm = HelloAgentsLLM()
+    main_llm = AgentCoreLLM()
 
     # 轻量模型（使用环境变量配置）
-    light_llm = HelloAgentsLLM()
+    light_llm = AgentCoreLLM()
 
     config = Config(subagent_enabled=False, skills_enabled=False)
 
@@ -140,7 +140,7 @@ def example_4_different_agent_types():
     print("示例 4：不同类型的子代理")
     print("="*60)
 
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
     config = Config(subagent_enabled=False, skills_enabled=False)
     registry = ToolRegistry()
 
@@ -176,7 +176,7 @@ def example_5_tool_filtering():
         CustomFilter
     )
 
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
     config = Config(subagent_enabled=False, skills_enabled=False)
 
     registry = ToolRegistry()
@@ -217,7 +217,7 @@ def example_5_tool_filtering():
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("HelloAgents 子代理机制示例")
+    print("AgentCore 子代理机制示例")
     print("="*60)
 
     # 运行所有示例

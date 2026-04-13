@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, Iterator, List, Dict, Any, Union, AsyncIterator
 
 from .llm_response import LLMResponse, StreamStats, LLMToolResponse, ToolCall
-from .exceptions import HelloAgentsException
+from .exceptions import AgentCoreException
 
 
 class BaseLLMAdapter(ABC):
@@ -158,7 +158,7 @@ class OpenAIAdapter(BaseLLMAdapter):
             )
             
         except Exception as e:
-            raise HelloAgentsException(f"OpenAI API调用失败: {str(e)}")
+            raise AgentCoreException(f"OpenAI API调用失败: {str(e)}")
     
     def stream_invoke(self, messages: List[Dict], **kwargs) -> Iterator[str]:
         """流式调用"""
@@ -214,7 +214,7 @@ class OpenAIAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"OpenAI API流式调用失败: {str(e)}")
+            raise AgentCoreException(f"OpenAI API流式调用失败: {str(e)}")
 
     async def astream_invoke(self, messages: List[Dict], **kwargs) -> AsyncIterator[str]:
         """真正的异步流式调用（使用 OpenAI 原生异步客户端）"""
@@ -270,7 +270,7 @@ class OpenAIAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"OpenAI API异步流式调用失败: {str(e)}")
+            raise AgentCoreException(f"OpenAI API异步流式调用失败: {str(e)}")
 
     def invoke_with_tools(self, messages: List[Dict], tools: List[Dict],
                          tool_choice: Union[str, Dict] = "auto", **kwargs) -> LLMToolResponse:
@@ -317,7 +317,7 @@ class OpenAIAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"OpenAI Function Calling调用失败: {str(e)}")
+            raise AgentCoreException(f"OpenAI Function Calling调用失败: {str(e)}")
 
 
 class AnthropicAdapter(BaseLLMAdapter):
@@ -333,7 +333,7 @@ class AnthropicAdapter(BaseLLMAdapter):
         try:
             from anthropic import Anthropic
         except ImportError:
-            raise HelloAgentsException(
+            raise AgentCoreException(
                 "使用Anthropic需要安装: pip install anthropic"
             )
 
@@ -403,7 +403,7 @@ class AnthropicAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Anthropic API调用失败: {str(e)}")
+            raise AgentCoreException(f"Anthropic API调用失败: {str(e)}")
 
     def stream_invoke(self, messages: List[Dict], **kwargs) -> Iterator[str]:
         """流式调用"""
@@ -448,7 +448,7 @@ class AnthropicAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Anthropic API流式调用失败: {str(e)}")
+            raise AgentCoreException(f"Anthropic API流式调用失败: {str(e)}")
 
     def invoke_with_tools(self, messages: List[Dict], tools: List[Dict], **kwargs) -> LLMToolResponse:
         """工具调用（Anthropic格式）"""
@@ -499,7 +499,7 @@ class AnthropicAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Anthropic工具调用失败: {str(e)}")
+            raise AgentCoreException(f"Anthropic工具调用失败: {str(e)}")
 
 
 class GeminiAdapter(BaseLLMAdapter):
@@ -514,7 +514,7 @@ class GeminiAdapter(BaseLLMAdapter):
         try:
             from google import genai
         except ImportError:
-            raise HelloAgentsException(
+            raise AgentCoreException(
                 "使用Gemini需要安装: pip install google-genai"
             )
 
@@ -587,7 +587,7 @@ class GeminiAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Gemini API调用失败: {str(e)}")
+            raise AgentCoreException(f"Gemini API调用失败: {str(e)}")
 
     def stream_invoke(self, messages: List[Dict], **kwargs) -> Iterator[str]:
         """流式调用"""
@@ -638,7 +638,7 @@ class GeminiAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Gemini API流式调用失败: {str(e)}")
+            raise AgentCoreException(f"Gemini API流式调用失败: {str(e)}")
 
     def invoke_with_tools(self, messages: List[Dict], tools: List[Dict], **kwargs) -> LLMToolResponse:
         """工具调用（Gemini格式）"""
@@ -707,7 +707,7 @@ class GeminiAdapter(BaseLLMAdapter):
             )
 
         except Exception as e:
-            raise HelloAgentsException(f"Gemini工具调用失败: {str(e)}")
+            raise AgentCoreException(f"Gemini工具调用失败: {str(e)}")
 
 
 def create_adapter(

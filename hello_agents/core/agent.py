@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, List, Dict, Any, Union, TYPE_CHECKING, AsyncGenerator
 import asyncio
 from .message import Message
-from .llm import HelloAgentsLLM
+from .llm import AgentCoreLLM
 from .config import Config
 from .lifecycle import AgentEvent, EventType, LifecycleHook, ExecutionContext
 
@@ -32,7 +32,7 @@ class Agent(ABC):
     def __init__(
         self,
         name: str,
-        llm: HelloAgentsLLM,
+        llm: AgentCoreLLM,
         system_prompt: Optional[str] = None,
         config: Optional[Config] = None,
         tool_registry: Optional['ToolRegistry'] = None
@@ -477,16 +477,16 @@ class Agent(ABC):
         使用独立的轻量 LLM 实例，节省成本
 
         Returns:
-            HelloAgentsLLM 实例
+            AgentCoreLLM 实例
         """
         if not hasattr(self, '_summary_llm'):
-            from ..core.llm import HelloAgentsLLM
+            from ..core.llm import AgentCoreLLM
 
             # 使用配置中的轻量模型
             provider = self.config.summary_llm_provider
             model = self.config.summary_llm_model
 
-            self._summary_llm = HelloAgentsLLM(
+            self._summary_llm = AgentCoreLLM(
                 provider=provider,
                 model=model,
                 temperature=self.config.summary_temperature,
@@ -1150,8 +1150,8 @@ class Agent(ABC):
             # 决定使用哪个 LLM
             if self.config.subagent_use_light_llm:
                 # 使用轻量模型
-                from ..core.llm import HelloAgentsLLM
-                light_llm = HelloAgentsLLM(
+                from ..core.llm import AgentCoreLLM
+                light_llm = AgentCoreLLM(
                     provider=self.config.subagent_light_llm_provider,
                     model=self.config.subagent_light_llm_model
                 )
@@ -1256,14 +1256,14 @@ class Agent(ABC):
         random_suffix = uuid.uuid4().hex[:4]
         return f"s-{timestamp}-{random_suffix}"
 
-    def _create_light_llm(self) -> HelloAgentsLLM:
+    def _create_light_llm(self) -> AgentCoreLLM:
         """创建轻量模型 LLM 实例
 
         Returns:
             轻量模型 LLM 实例
         """
         # 复用主 LLM 的配置，但使用轻量模型
-        light_llm = HelloAgentsLLM(
+        light_llm = AgentCoreLLM(
             provider=self.config.subagent_light_llm_provider,
             model=self.config.subagent_light_llm_model,
             temperature=self.llm.temperature if hasattr(self.llm, 'temperature') else 0.7,

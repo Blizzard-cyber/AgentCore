@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 
 from hello_agents.core.config import Config
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.agents.react_agent import ReActAgent
 from hello_agents.tools.registry import ToolRegistry
 from hello_agents.tools.builtin.calculator import CalculatorTool
@@ -33,7 +33,7 @@ class TestTraceIntegration:
         )
         
         # 创建 LLM（使用 mock）
-        llm = HelloAgentsLLM(provider="openai", model="gpt-3.5-turbo")
+        llm = AgentCoreLLM(provider="openai", model="gpt-3.5-turbo")
         
         # 创建工具注册表
         tool_registry = ToolRegistry()
@@ -59,7 +59,7 @@ class TestTraceIntegration:
         """测试禁用 Trace"""
         config = Config(trace_enabled=False)
         
-        llm = HelloAgentsLLM(provider="openai", model="gpt-3.5-turbo")
+        llm = AgentCoreLLM(provider="openai", model="gpt-3.5-turbo")
         agent = ReActAgent(
             name="TestAgent",
             llm=llm,
@@ -76,7 +76,7 @@ class TestTraceIntegration:
             trace_dir=self.temp_dir
         )
         
-        llm = HelloAgentsLLM(provider="openai", model="gpt-3.5-turbo")
+        llm = AgentCoreLLM(provider="openai", model="gpt-3.5-turbo")
         agent = ReActAgent(
             name="TestAgent",
             llm=llm,

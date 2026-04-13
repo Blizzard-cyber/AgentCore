@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime
 from typing import Optional, List, Dict, Any, AsyncGenerator
 from ..core.agent import Agent
-from ..core.llm import HelloAgentsLLM
+from ..core.llm import AgentCoreLLM
 from ..core.config import Config
 from ..core.message import Message
 from ..core.lifecycle import AgentEvent, EventType, LifecycleHook
@@ -53,7 +53,7 @@ class ReActAgent(Agent):
     def __init__(
         self,
         name: str,
-        llm: HelloAgentsLLM,
+        llm: AgentCoreLLM,
         tool_registry: Optional[ToolRegistry] = None,
         system_prompt: Optional[str] = None,
         config: Optional[Config] = None,

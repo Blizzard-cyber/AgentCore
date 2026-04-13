@@ -1,21 +1,21 @@
 """异常体系"""
 
-class HelloAgentsException(Exception):
-    """HelloAgents基础异常类"""
+class AgentCoreException(Exception):
+    """AgentCore基础异常类"""
     pass
 
-class LLMException(HelloAgentsException):
+class LLMException(AgentCoreException):
     """LLM相关异常"""
     pass
 
-class AgentException(HelloAgentsException):
+class AgentException(AgentCoreException):
     """Agent相关异常"""
     pass
 
-class ConfigException(HelloAgentsException):
+class ConfigException(AgentCoreException):
     """配置相关异常"""
     pass
 
-class ToolException(HelloAgentsException):
+class ToolException(AgentCoreException):
     """工具相关异常"""
     pass

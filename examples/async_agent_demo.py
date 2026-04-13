@@ -4,7 +4,7 @@
 """
 
 import asyncio
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.core.lifecycle import AgentEvent, EventType
 from hello_agents.agents.react_agent import ReActAgent
@@ -113,7 +113,7 @@ async def main():
     print("=" * 60)
     
     # 1. 初始化 LLM
-    llm = HelloAgentsLLM()
+    llm = AgentCoreLLM()
     
     # 2. 创建工具注册表
     registry = ToolRegistry()
@@ -165,7 +165,7 @@ async def stream_example():
     print("=" * 60)
     
     # 初始化（同上）
-    llm = HelloAgentsLLM(...)
+    llm = AgentCoreLLM(...)
     agent = ReActAgent(...)
     
     # 流式执行

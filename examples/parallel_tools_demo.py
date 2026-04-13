@@ -5,7 +5,7 @@
 
 import asyncio
 import time
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.agents.react_agent import ReActAgent
 from hello_agents.tools.registry import ToolRegistry
@@ -57,7 +57,7 @@ async def test_parallel_performance():
     )
     
     # 创建 Agent
-    llm = HelloAgentsLLM(...)  # 需要配置真实 LLM
+    llm = AgentCoreLLM(...)  # 需要配置真实 LLM
     agent = ReActAgent(
         name="ParallelAgent",
         llm=llm,
@@ -101,7 +101,7 @@ async def test_concurrency_limit():
         trace_enabled=False
     )
     
-    llm = HelloAgentsLLM(...)
+    llm = AgentCoreLLM(...)
     agent = ReActAgent(
         name="LimitedAgent",
         llm=llm,

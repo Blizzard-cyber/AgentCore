@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 
 from ..core.agent import Agent
-from ..core.llm import HelloAgentsLLM
+from ..core.llm import AgentCoreLLM
 from ..core.config import Config
 from ..core.message import Message
 from ..core.streaming import StreamEvent, StreamEventType
@@ -62,7 +62,7 @@ class ReflectionAgent(Agent):
     def __init__(
         self,
         name: str,
-        llm: HelloAgentsLLM,
+        llm: AgentCoreLLM,
         system_prompt: Optional[str] = None,
         config: Optional[Config] = None,
         max_iterations: int = 3,

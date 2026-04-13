@@ -23,7 +23,7 @@ from hello_agents.tools.builtin.devlog_tool import (
 from hello_agents.tools.response import ToolResponse, ToolStatus
 from hello_agents.tools.errors import ToolErrorCode
 from hello_agents import ReActAgent, ToolRegistry
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from dotenv import load_dotenv
 load_dotenv()
@@ -376,7 +376,7 @@ class TestAgentIntegration:
             )
 
             registry = ToolRegistry()
-            llm = HelloAgentsLLM(provider="openai", model="gpt-3.5-turbo")
+            llm = AgentCoreLLM(provider="openai", model="gpt-3.5-turbo")
 
             agent = ReActAgent(
                 name="TestAgent",
@@ -404,7 +404,7 @@ class TestAgentIntegration:
         )
 
         registry = ToolRegistry()
-        llm = HelloAgentsLLM(provider="openai", model="gpt-3.5-turbo")
+        llm = AgentCoreLLM(provider="openai", model="gpt-3.5-turbo")
 
         agent = ReActAgent(
             name="TestAgent",

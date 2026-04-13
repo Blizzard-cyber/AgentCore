@@ -1,4 +1,4 @@
-"""测试 HelloAgentsLLM 的 Function Calling 功能"""
+"""测试 AgentCoreLLM 的 Function Calling 功能"""
 
 import sys
 import os
@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import pytest
 from unittest.mock import Mock, MagicMock, patch
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from openai.types.chat import ChatCompletion
 
 
@@ -23,13 +23,13 @@ class TestLLMFunctionCalling:
     
     @pytest.fixture
     def llm(self, mock_openai_client):
-        """创建 HelloAgentsLLM 实例"""
+        """创建 AgentCoreLLM 实例"""
         with patch.dict('os.environ', {
             'LLM_API_KEY': 'test-key',
             'LLM_BASE_URL': 'https://api.test.com/v1',
             'LLM_MODEL_ID': 'test-model'
         }):
-            return HelloAgentsLLM()
+            return AgentCoreLLM()
     
     def test_invoke_with_tools_basic(self, llm, mock_openai_client):
         """测试基本的 Function Calling 调用"""
@@ -91,7 +91,7 @@ class TestLLMFunctionCalling:
     
     def test_invoke_with_tools_error_handling(self, llm, mock_openai_client):
         """测试错误处理"""
-        from hello_agents.core.exceptions import HelloAgentsException
+        from hello_agents.core.exceptions import AgentCoreException
         
         messages = [{"role": "user", "content": "测试"}]
         tools = []
@@ -99,8 +99,8 @@ class TestLLMFunctionCalling:
         # Mock 抛出异常
         mock_openai_client.chat.completions.create.side_effect = Exception("API 错误")
         
-        # 应该抛出 HelloAgentsException
-        with pytest.raises(HelloAgentsException) as exc_info:
+        # 应该抛出 AgentCoreException
+        with pytest.raises(AgentCoreException) as exc_info:
             llm.invoke_with_tools(messages, tools)
         
         assert "Function Calling 调用失败" in str(exc_info.value)
@@ -113,7 +113,7 @@ class TestLLMFunctionCallingIntegration:
     @pytest.mark.skip(reason="需要真实 LLM 环境")
     def test_real_function_calling(self):
         """测试真实的 Function Calling"""
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         
         messages = [{"role": "user", "content": "帮我计算 15 * 8"}]
         tools = [{

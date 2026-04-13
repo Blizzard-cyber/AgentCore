@@ -4,7 +4,7 @@ import json
 from typing import Optional, List, Dict, TYPE_CHECKING, Any, AsyncGenerator
 
 from ..core.agent import Agent
-from ..core.llm import HelloAgentsLLM
+from ..core.llm import AgentCoreLLM
 from ..core.config import Config
 from ..core.message import Message
 from ..core.streaming import StreamEvent, StreamEventType
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 class Planner:
     """规划器 - 负责将复杂问题分解为简单步骤（使用 Function Calling）"""
 
-    def __init__(self, llm_client: HelloAgentsLLM, system_prompt: Optional[str] = None):
+    def __init__(self, llm_client: AgentCoreLLM, system_prompt: Optional[str] = None):
         self.llm_client = llm_client
         self.system_prompt = system_prompt or """你是一个顶级的AI规划专家。你的任务是将用户提出的复杂问题分解成一个由多个简单步骤组成的行动计划。
 请确保计划中的每个步骤都是一个独立的、可执行的子任务，并且严格按照逻辑顺序排列。"""
@@ -91,7 +91,7 @@ class Executor:
 
     def __init__(
         self,
-        llm_client: HelloAgentsLLM,
+        llm_client: AgentCoreLLM,
         system_prompt: Optional[str] = None,
         tool_registry: Optional['ToolRegistry'] = None,
         enable_tool_calling: bool = True,
@@ -276,7 +276,7 @@ class PlanSolveAgent(Agent):
     def __init__(
         self,
         name: str,
-        llm: HelloAgentsLLM,
+        llm: AgentCoreLLM,
         system_prompt: Optional[str] = None,
         config: Optional[Config] = None,
         planner_prompt: Optional[str] = None,

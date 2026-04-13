@@ -1,18 +1,18 @@
 """核心框架模块"""
 
 from .agent import Agent
-from .llm import HelloAgentsLLM
+from .llm import AgentCoreLLM
 from .message import Message
 from .config import Config
-from .exceptions import HelloAgentsException
+from .exceptions import AgentCoreException
 from .llm_response import LLMResponse, StreamStats
 
 __all__ = [
     "Agent",
-    "HelloAgentsLLM",
+    "AgentCoreLLM",
     "Message",
     "Config",
-    "HelloAgentsException",
+    "AgentCoreException",
     "LLMResponse",
     "StreamStats"
 ]

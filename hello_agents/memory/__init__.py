@@ -1,6 +1,6 @@
 """企业级记忆系统
 
-为HelloAgents框架提供企业级记忆能力：
+为AgentCore框架提供企业级记忆能力：
 - MemoryManager: 记忆系统核心管理器
 - LongTermMemory: 长期记忆存储与管理
 - ShortTermMemory: 短期记忆（工作记忆）

@@ -8,7 +8,7 @@
 """
 
 from hello_agents import ReActAgent, SimpleAgent
-from hello_agents.core.llm import HelloAgentsLLM
+from hello_agents.core.llm import AgentCoreLLM
 from hello_agents.core.config import Config
 from hello_agents.tools.registry import ToolRegistry
 from hello_agents.tools.builtin import ReadTool, WriteTool
@@ -34,7 +34,7 @@ def demo_basic_save_load():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         agent = SimpleAgent("assistant", llm, config=config)
         
         # 添加一些对话历史
@@ -81,7 +81,7 @@ def demo_list_sessions():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         agent = SimpleAgent("assistant", llm, config=config)
         
         # 创建多个会话
@@ -119,7 +119,7 @@ def demo_consistency_check():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         registry1 = ToolRegistry()
         registry1.register_tool(ReadTool(project_root="./"))
         
@@ -162,7 +162,7 @@ def demo_auto_save():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         agent = SimpleAgent("assistant", llm, config=config)
         
         print("\n添加消息（每 3 条自动保存）...")
@@ -195,7 +195,7 @@ def demo_metadata_tracking():
             trace_enabled=False
         )
         
-        llm = HelloAgentsLLM()
+        llm = AgentCoreLLM()
         agent = SimpleAgent("assistant", llm, config=config)
         
         # 添加消息

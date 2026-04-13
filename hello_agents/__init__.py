@@ -1,5 +1,5 @@
 """
-HelloAgents - 灵活、可扩展的多智能体框架
+AgentCore - 灵活、可扩展的多智能体框架
 
 基于OpenAI原生API构建，提供简洁高效的智能体开发体验。
 """
@@ -15,10 +15,10 @@ logging.getLogger("neo4j.notifications").setLevel(logging.WARNING)
 from .version import __version__, __author__, __email__, __description__
 
 # 核心组件
-from .core.llm import HelloAgentsLLM
+from .core.llm import AgentCoreLLM
 from .core.config import Config
 from .core.message import Message
-from .core.exceptions import HelloAgentsException
+from .core.exceptions import AgentCoreException
 
 # Agent实现
 from .agents.simple_agent import SimpleAgent
@@ -51,10 +51,10 @@ __all__ = [
     "__description__",
 
     # 核心组件
-    "HelloAgentsLLM",
+    "AgentCoreLLM",
     "Config",
     "Message",
-    "HelloAgentsException",
+    "AgentCoreException",
 
     # Agent范式
     "SimpleAgent",

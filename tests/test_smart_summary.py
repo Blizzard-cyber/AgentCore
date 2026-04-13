@@ -2,7 +2,7 @@
 
 import pytest
 import os
-from hello_agents import SimpleAgent, HelloAgentsLLM
+from hello_agents import SimpleAgent, AgentCoreLLM
 from hello_agents.core.message import Message
 from hello_agents.core.config import Config
 
@@ -14,7 +14,7 @@ load_dotenv()
 @pytest.fixture
 def llm():
     """创建真实的 LLM"""
-    return HelloAgentsLLM()
+    return AgentCoreLLM()
 
 
 @pytest.fixture
